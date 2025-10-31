@@ -1,0 +1,73 @@
+{
+  "imsi": "310150123456789",
+  "msisdn": "15551234567",
+
+  "K": "465B5CE8B199B49FAA5F0A2EE238A6BC",
+  "opc": "E8ED289DEBA952E4283B54E88E6183CA",
+  "amf": "8000",
+  "sqn": 12345,
+
+  "subscriberStatus": 0,
+  "accessRestrictionData": 0,
+  "networkAccessMode": 2,
+
+  "ambrUplink": 50000000,
+  "ambrDownlink": 100000000,
+
+  "pdnType": 0,
+
+  "staticIpApnMap": {
+    "internet": "10.1.2.3",
+    "ims": "10.1.2.4"
+  },
+
+  "apnProfiles": [
+    {
+      "apnName": "internet",
+      "pdnType": 0,
+      "pdnGwAllocationType": 1,
+      "pdnGwIP": null,
+      "pdnGwHost": null,
+      "qci": 9,
+      "priorityLevel": 8,
+      "preemptionCapability": true,
+      "preemptionVulnerability": false,
+      "ambrUL": 50000000,
+      "ambrDL": 100000000
+    },
+    {
+      "apnName": "ims",
+      "pdnType": 0,
+      "pdnGwAllocationType": 0,
+      "pdnGwIP": "10.42.8.60",
+      "pdnGwHost": "pgw1.operator.com",
+      "qci": 5,
+      "priorityLevel": 1,
+      "preemptionCapability": true,
+      "preemptionVulnerability": false,
+      "ambrUL": 20000000,
+      "ambrDL": 50000000
+    }
+  ],
+
+  "apnContextMap": {
+    "1": "internet",
+    "2": "ims"
+  },
+
+  "defaultApn": {
+    "apnName": "internet",
+    "pdnType": 0,
+    "pdnGwAllocationType": 1,
+    "pdnGwIP": null,
+    "pdnGwHost": null,
+    "qci": 9,
+    "priorityLevel": 8,
+    "preemptionCapability": true,
+    "preemptionVulnerability": false,
+    "ambrUL": 50000000,
+    "ambrDL": 100000000
+  },
+
+  "lastUpdated": "2025-10-29T10:15:30Z"
+}

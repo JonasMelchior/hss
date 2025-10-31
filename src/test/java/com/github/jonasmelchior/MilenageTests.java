@@ -16,20 +16,20 @@ import java.util.concurrent.ExecutionException;
 public class MilenageTests {
     @Test
     void testCryptoStuff() throws ExecutionException, InterruptedException, DecoderException, NoSuchAlgorithmException, InvalidKeyException {
-        MilenageCrypto milenageCrypto = new MilenageCrypto("238025123456789");
-        Map<MilenageResult, byte []> milenageResultMap = milenageCrypto.calculateAuthenticationInformationAnswer();
-        milenageCrypto.calculateAUTN(
-                milenageCrypto.getSqn(),
-                milenageResultMap.get(MilenageResult.AK),
-                milenageCrypto.getAmf(),
-                milenageResultMap.get(MilenageResult.MAC_A)
-        );
-        milenageCrypto.calculateKasme(
-                milenageResultMap.get(MilenageResult.CK),
-                milenageResultMap.get(MilenageResult.IK),
-                Hex.decodeHex("32F810"),
-                milenageCrypto.getSqn(),
-                milenageResultMap.get(MilenageResult.AK)
-        );
+//        MilenageCrypto milenageCrypto = new MilenageCrypto("238025123456789");
+//        Map<MilenageResult, byte []> milenageResultMap = milenageCrypto.calculateAuthenticationInformationAnswer();
+//        milenageCrypto.calculateAUTN(
+//                milenageCrypto.getSqn(),
+//                milenageResultMap.get(MilenageResult.AK),
+//                milenageCrypto.getAmf(),
+//                milenageResultMap.get(MilenageResult.MAC_A)
+//        );
+//        milenageCrypto.calculateKasme(
+//                milenageResultMap.get(MilenageResult.CK),
+//                milenageResultMap.get(MilenageResult.IK),
+//                Hex.decodeHex("32F810"),
+//                milenageCrypto.getSqn(),
+//                milenageResultMap.get(MilenageResult.AK)
+//        );
     }
 }

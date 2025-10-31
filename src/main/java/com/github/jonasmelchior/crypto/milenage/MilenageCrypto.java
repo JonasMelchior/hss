@@ -1,5 +1,7 @@
 package com.github.jonasmelchior.crypto.milenage;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
 import threegpp.milenage.Milenage;
 import threegpp.milenage.MilenageBufferFactory;
 import threegpp.milenage.MilenageResult;
@@ -10,8 +12,10 @@ import threegpp.milenage.cipher.Ciphers;
 import javax.crypto.Cipher;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
@@ -22,41 +26,44 @@ public class MilenageCrypto {
     private byte[] sqn;
     private byte[] amf;
 
-    public MilenageCrypto(String imsi) {
+    public MilenageCrypto(String KKey, String opc, String amf, Long sqn) throws MilenageKeyDecodingException {
         MilenageBufferFactory<BigIntegerBuffer> bufferFactory = BigIntegerBufferFactory.getInstance();
-        //TODO: Change this
-        byte[] testKBytes = new byte[] {
-                (byte) 0xCB, (byte) 0xB6, (byte) 0x22, (byte) 0x36,
-                (byte) 0xA2, (byte) 0x83, (byte) 0x1C, (byte) 0xAB,
-                (byte) 0x2A, (byte) 0xC6, (byte) 0x13, (byte) 0x77,
-                (byte) 0x5F, (byte) 0x00, (byte) 0x50, (byte) 0x63
-        };
-        byte[] testOPcBytes = new byte[] {
-                (byte) 0xA7, (byte) 0x3D, (byte) 0x56, (byte) 0x9C,
-                (byte) 0xE4, (byte) 0x12, (byte) 0x4F, (byte) 0x8B,
-                (byte) 0x3A, (byte) 0x7F, (byte) 0x99, (byte) 0x21,
-                (byte) 0xD8, (byte) 0x65, (byte) 0x44, (byte) 0x2E
-        };
 
-        Cipher K = Ciphers.createRijndaelCipher(testKBytes);
-        byte[] OPc = Milenage.calculateOPc(testOPcBytes, K, bufferFactory);
+        byte[] kBytes;
+        byte[] opcBytes;
+        byte[] amfBytes;
+        byte[] sqnBytes;
+
+        try {
+            kBytes = Hex.decodeHex(KKey);
+            opcBytes = Hex.decodeHex(opc);
+            amfBytes = Hex.decodeHex(amf);
+            sqnBytes = longTo6Bytes(sqn);
+        } catch (DecoderException e) {
+            throw new MilenageKeyDecodingException("Failed to decode milenage keys: " + e.getMessage());
+        }
+
+        this.amf = amfBytes;
+        this.sqn = sqnBytes;
+
+        Cipher K = Ciphers.createRijndaelCipher(kBytes);
+        byte[] OPc = Milenage.calculateOPc(opcBytes, K, bufferFactory);
         this.milenage = new Milenage<>(OPc, K, bufferFactory);
     }
 
     public Map<MilenageResult, byte []> calculateAuthenticationInformationAnswer() throws ExecutionException, InterruptedException {
-        this.amf = new byte[]{(byte) 0x80, (byte) 0x00};
-        this.rand = new byte[]{
-                (byte) 0x7f, (byte) 0x29, (byte) 0x4c, (byte) 0x83,
-                (byte) 0x51, (byte) 0x0d, (byte) 0x69, (byte) 0x8a,
-                (byte) 0x3c, (byte) 0x4b, (byte) 0x5a, (byte) 0x91,
-                (byte) 0x11, (byte) 0xb0, (byte) 0x65, (byte) 0xdb
-        };
-        this.sqn = new byte[]{
-                (byte) 0xa1, (byte) 0x7d, (byte) 0x4b, (byte) 0x93,
-                (byte) 0x12, (byte) 0x56
-        };
+        this.rand = new byte[16];
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(rand);
 
         return this.milenage.calculateAll(this.rand, sqn, amf, Executors.newSingleThreadExecutor());
+    }
+
+    private static byte[] longTo6Bytes(Long value) {
+        byte[] fullBytes = ByteBuffer.allocate(Long.BYTES).putLong(value).array(); // 8 bytes
+        byte[] sixBytes = new byte[6];
+        System.arraycopy(fullBytes, 2, sixBytes, 0, 6); // take least significant 6 bytes
+        return sixBytes;
     }
 
     public byte[] getRand() {

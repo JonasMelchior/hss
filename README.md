@@ -6,11 +6,11 @@ This Project aims to implement an HSS with Java using the quarkus framework with
 
 ● **S6a**
 - [x] Authentication-Information-Request/Answer
-- [ ] Update-Location-Request/Answer: 
-- [ ] Cancel-Location-Request/Answer: 
-- [ ] Insert-Subscriber-Data-Request/Answer:
-- [ ] Delete-Subscriber-Data-Request/Answer:
-- [ ] Purge-UE-Request/Answer
+- [x] Update-Location-Request/Answer: 
+- [x] Cancel-Location-Request/Answer: 
+- [x] Insert-Subscriber-Data-Request/Answer:
+- [x] Delete-Subscriber-Data-Request/Answer:
+- [x] Purge-UE-Request/Answer
 - [ ] Reset-Request/Answer
 - [ ] Notify-Request/Answer
 
