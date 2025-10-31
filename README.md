@@ -15,7 +15,7 @@ This Project aims to implement an HSS with Java using the quarkus framework with
 - [ ] Notify-Request/Answer
 
 ● **13**
-- [] ME Identity Check Request/Answer
+- [ ] ME Identity Check Request/Answer
 
 ## Running the application in dev mode
 
